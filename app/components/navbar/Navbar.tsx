@@ -1,5 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
+import SearchFilter from "./SearchFilter";
+import UserNav from "./UserNav";
+import AddPropertyButton from "./AddPropertyButton";
 
 const Navbar = () => {
   return (
@@ -9,7 +12,13 @@ const Navbar = () => {
           <Link href="/">
             <Image src="/Airbnb_Logo.png" width={120} height={40} alt="" />
           </Link>
-          <div className="flex space-x-6">Search filter</div>
+          <div className="flex space-x-6">
+            <SearchFilter />
+          </div>
+          <div className="flex items-center space-x-6">
+            <AddPropertyButton />
+            <UserNav />
+          </div>
         </div>
       </div>
     </nav>
