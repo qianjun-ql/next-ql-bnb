@@ -6,6 +6,7 @@ import { useState } from "react";
 import useRegisterModal from "@/app/hooks/useRegisterModal";
 import apiService from "@/app/services/apiService";
 import Modal from "./Modal";
+import { handleLogin } from "@/app/lib/action";
 
 const RegisterModal = () => {
   const router = useRouter();
@@ -15,16 +16,20 @@ const RegisterModal = () => {
   const [passwordTwo, setPasswordTwo] = useState("");
   const [error, setError] = useState<string[]>([]);
 
-  const submitRegister = async () => {
+  const onSubmitRegister = async () => {
     const formData = {
       email: email,
-      passwordOne: passwordOne,
-      passwordTwo: passwordTwo,
+      password1: passwordOne,
+      password2: passwordTwo,
     };
 
-    const response = await apiService.post("/api/auth/register/", formData);
+    const response = await apiService.post(
+      "/api/auth/register/",
+      JSON.stringify(formData)
+    );
 
     if (response.access) {
+      handleLogin(response.user.pk, response.access, response.refresh);
       registerModal.close();
       router.push("/");
     } else {
@@ -38,7 +43,7 @@ const RegisterModal = () => {
 
   const content = (
     <>
-      <form action={submitRegister} className="space-y-4">
+      <form action={onSubmitRegister} className="space-y-4">
         <input
           onChange={(e) => setEmail(e.target.value)}
           type="email"
@@ -69,7 +74,7 @@ const RegisterModal = () => {
           );
         })}
 
-        <CustomButton label="submit" onClick={() => console.log("click")} />
+        <CustomButton label="submit" onClick={onSubmitRegister} />
       </form>
     </>
   );
@@ -77,7 +82,7 @@ const RegisterModal = () => {
     <Modal
       isOpen={registerModal.isOpen}
       close={registerModal.close}
-      label="Sign up"
+      label="Register"
       content={content}
     />
   );
