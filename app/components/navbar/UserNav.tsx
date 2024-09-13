@@ -4,11 +4,17 @@ import { useState } from "react";
 import UserNavMenu from "./UserNavMenu";
 import useLoginModal from "@/app/hooks/useLoginModal";
 import useRegisterModal from "@/app/hooks/useRegisterModal";
+import LogoutButton from "../LogoutButton";
 
-const UserNav = () => {
+interface UserNavProps {
+  userId?: string | null;
+}
+
+const UserNav: React.FC<UserNavProps> = ({ userId }) => {
   const [isOpen, setIsOpen] = useState(false);
   const loginModal = useLoginModal();
   const registerModal = useRegisterModal();
+  // console.log(userId);
 
   return (
     <div className="p-2 relative inline-block border rounded-full">
@@ -43,20 +49,26 @@ const UserNav = () => {
 
       {isOpen && (
         <div className="w-[220px] absolute top-[60px] right-0 bg-white border rounded-xl shadow-md flex flex-col cursor-pointer">
-          <UserNavMenu
-            label="Login"
-            onClick={() => {
-              setIsOpen(false);
-              loginModal.open();
-            }}
-          />
-          <UserNavMenu
-            label="Register"
-            onClick={() => {
-              setIsOpen(false);
-              registerModal.open();
-            }}
-          />
+          {userId ? (
+            <LogoutButton />
+          ) : (
+            <>
+              <UserNavMenu
+                label="Login"
+                onClick={() => {
+                  setIsOpen(false);
+                  loginModal.open();
+                }}
+              />
+              <UserNavMenu
+                label="Register"
+                onClick={() => {
+                  setIsOpen(false);
+                  registerModal.open();
+                }}
+              />
+            </>
+          )}
         </div>
       )}
     </div>
